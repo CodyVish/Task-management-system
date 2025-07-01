@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import { Task, useCategoryStore } from '@/store/board';
 import { useModal } from '@/store/modal';
 import { Calendar, Pencil, Trash2 } from 'lucide-react';
