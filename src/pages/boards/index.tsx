@@ -9,11 +9,11 @@ const Dashboard = () => {
       const { email } = useAuthStore();
       const userBoards = useMemo(() => Object.values(boards).filter((board) => board.email_id === email), [boards, email]);
       return (
-            <div className="h-full px-4 pt-8">
+            <div className="h-full px-3 sm:px-4 md:px-6 lg:px-8 pt-6 sm:pt-8 pb-6">
                   {userBoards.length === 0 ? (
                         <NoBoard />
                   ) : (
-                        <div className='grid gap-x-2 gap-y-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3'>
+                        <div className='grid gap-3 sm:gap-4 md:gap-x-4 md:gap-y-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'>
                               {userBoards.map(board => <BoardCard key={board.board_id} {...board} />)}
                         </div>
                   )}

@@ -94,20 +94,20 @@ const CreateBoard = () => {
     }
     return (
         <Dialog open={isOpen} onOpenChange={() => closeModal()}>
-            <DialogContent className="sm:max-w-md">
+            <DialogContent className="sm:max-w-md w-[95%] max-w-[400px] mx-auto">
                 <DialogHeader>
-                    <DialogTitle className="text-2xl text-center font-bold text-black dark:text-white">Create Board</DialogTitle>
+                    <DialogTitle className="text-xl sm:text-2xl text-center font-bold text-black dark:text-white">Create Board</DialogTitle>
                 </DialogHeader>
                 <Form {...form}>
-                    <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
+                    <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 sm:space-y-5">
                         <FormField
                             control={form.control}
                             name="title"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel className="text-black dark:text-white">Title</FormLabel>
+                                    <FormLabel className="text-sm sm:text-base text-black dark:text-white">Title</FormLabel>
                                     <FormControl>
-                                        <Input className='shadow-lg text-black dark:text-white placeholder:text-gray-500 dark:placeholder:text-gray-300' placeholder="Enter title of the board" {...field} type='text' />
+                                        <Input className='shadow-lg text-black dark:text-white placeholder:text-gray-500 dark:placeholder:text-gray-300 text-sm sm:text-base' placeholder="Enter title of the board" {...field} type='text' />
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>
@@ -118,15 +118,15 @@ const CreateBoard = () => {
                             name="description"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel className="text-black dark:text-white">Description</FormLabel>
+                                    <FormLabel className="text-sm sm:text-base text-black dark:text-white">Description</FormLabel>
                                     <FormControl>
-                                        <Input className='shadow-lg text-black dark:text-white placeholder:text-gray-500 dark:placeholder:text-gray-300' placeholder="Enter the board description" {...field} type='text' />
+                                        <Input className='shadow-lg text-black dark:text-white placeholder:text-gray-500 dark:placeholder:text-gray-300 text-sm sm:text-base' placeholder="Enter the board description" {...field} type='text' />
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>
                             )}
                         />
-                        <Button className="w-full" type="submit" variant="default">
+                        <Button className="w-full h-10 sm:h-11 text-sm sm:text-base" type="submit" variant="default">
                             Create
                         </Button>
                     </form>

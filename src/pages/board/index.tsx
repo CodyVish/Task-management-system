@@ -78,23 +78,30 @@ const BoardPage = () => {
     }
 
     return (
-        <div className="h-full px-5 pt-7 bg-transparent dark:bg-transparent text-black dark:text-white transition-colors">
-            <div className="flex items-center justify-between">
-                <div className="break-all overflow-wrap">
-                    <p className="font-bold text-xl lg:text-3xl text-black dark:text-white">{boards[boardID as string].title}</p>
-                    <p className="mt-1 text-black dark:text-white">{boards[boardID as string].desc}</p>
+        <div className="h-full px-3 sm:px-4 md:px-5 pt-4 sm:pt-6 md:pt-7 bg-transparent dark:bg-transparent text-black dark:text-white transition-colors">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4">
+                <div className="break-all overflow-wrap flex-1 min-w-0">
+                    <p className="font-bold text-lg sm:text-xl md:text-2xl lg:text-3xl text-black dark:text-white">{boards[boardID as string].title}</p>
+                    <p className="mt-1 text-sm sm:text-base text-black dark:text-white line-clamp-2">{boards[boardID as string].desc}</p>
                 </div>
-                <Button className='block lg:hidden' size={"sm"} variant="outline" onClick={() => openModal("category", "", null)}>Add Category</Button>
+                <Button 
+                  className='block lg:hidden flex-shrink-0 h-9 px-3 text-sm' 
+                  size={"sm"} 
+                  variant="outline" 
+                  onClick={() => openModal("category", "", null)}
+                >
+                  Add Category
+                </Button>
             </div>
-            <div className="bg-white dark:bg-[#232323] rounded-xl p-5 mt-7 transition-colors">
+            <div className="bg-white dark:bg-[#232323] rounded-xl p-3 sm:p-4 md:p-5 mt-4 sm:mt-6 md:mt-7 transition-colors">
                 <DragDropContext onDragEnd={handleDragEnd}>
-                    <div className="grid lg:grid-cols-4 gap-y-4 gap-x-7">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4 md:gap-5 lg:gap-7">
                         {cats.map((cat) => {
                             return (
                                 <Droppable key={cat.cat_id} droppableId={cat.cat_id}>
                                     {(provided: DroppableProvided) => <div {...provided.droppableProps}
                                         ref={provided.innerRef}>
-                                        <div className="flex items-center gap-x-2 rounded-3xl px-3 py-[2px] text-center w-fit shadow-md transition-colors"
+                                        <div className="flex flex-wrap items-center gap-x-2 gap-y-1 rounded-2xl sm:rounded-3xl px-2 sm:px-3 py-1 sm:py-[2px] text-center w-fit shadow-md transition-colors"
                                             style={{
                                                 backgroundColor:
                                                     cat.name === 'ToDo' ? '#E85A4F' :
@@ -102,12 +109,31 @@ const BoardPage = () => {
                                                     cat.name === 'Done' ? '#8ABEB7' :
                                                     cat.color || (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? '#232323' : '#e0e0e0')
                                             }}>
-                                            <p className="font-semibold text-[#434445] text-sm">{cat.name} <span className='ml-1 text-xs font-bold'>({searchedTasks.filter((task) => task.cat_id === cat.cat_id).length})</span></p>
-                                            <CirclePlus size={15} onClick={() => openModal("create-task", cat.cat_id, null)} className="cursor-pointer mt-[2px]" />
-                                            <Pencil size={15} onClick={() => openModal("edit-category", cat.cat_id, null)} className="cursor-pointer mt-[2px]" />
-                                            <Trash2 size={15} onClick={() => deleteCategory(cat.cat_id)} className="cursor-pointer mt-[2px]" />
+                                            <p className="font-semibold text-[#434445] text-xs sm:text-sm">
+                                              {cat.name} 
+                                              <span className='ml-1 text-[10px] sm:text-xs font-bold'>
+                                                ({searchedTasks.filter((task) => task.cat_id === cat.cat_id).length})
+                                              </span>
+                                            </p>
+                                            <div className="flex items-center gap-x-1 sm:gap-x-2">
+                                              <CirclePlus 
+                                                size={14} 
+                                                onClick={() => openModal("create-task", cat.cat_id, null)} 
+                                                className="cursor-pointer hover:scale-110 transition-transform" 
+                                              />
+                                              <Pencil 
+                                                size={14} 
+                                                onClick={() => openModal("edit-category", cat.cat_id, null)} 
+                                                className="cursor-pointer hover:scale-110 transition-transform" 
+                                              />
+                                              <Trash2 
+                                                size={14} 
+                                                onClick={() => deleteCategory(cat.cat_id)} 
+                                                className="cursor-pointer hover:scale-110 transition-transform text-red-600" 
+                                              />
+                                            </div>
                                         </div>
-                                        <div className="flex flex-col gap-y-3 mt-4">
+                                        <div className="flex flex-col gap-y-2 sm:gap-y-3 mt-3 sm:mt-4">
                                             {
                                                 searchedTasks.filter((task) => task.cat_id === cat.cat_id).map((task, index) => (
                                                     <TaskCard id={index} key={task.task_id} {...task} />
@@ -121,7 +147,19 @@ const BoardPage = () => {
                         })}
                     </div>
                 </DragDropContext>
-                {content}
+                {content && (
+                  <div className="text-center mt-4 sm:mt-6 md:mt-7 px-4">
+                    <p className="font-semibold text-base sm:text-lg text-gray-700 dark:text-gray-300">
+                      {boardTasks.length === 0 ? "No tasks found" : "No tasks found"}
+                    </p> 
+                    <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400 mt-1">
+                      {boardTasks.length === 0 
+                        ? "Create tasks by clicking on the plus button next to each category!" 
+                        : "Try searching for something else!"
+                      }
+                    </p> 
+                  </div>
+                )}
             </div>
         </div>
     )
