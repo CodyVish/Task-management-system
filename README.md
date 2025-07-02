@@ -25,7 +25,3 @@ Taskflow is a simple and modern Kanban board app for managing your tasks and pro
 
 ## Notes
 If you run into issues starting the dev server, try deleting the `.vite` directory inside `node_modules` and run `npm install` again.
-
----
-
-Feel free to customize and use Taskflow for your own projects!
