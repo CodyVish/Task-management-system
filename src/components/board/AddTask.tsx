@@ -48,6 +48,7 @@ const formSchema = z.object({
 const AddTask = () => {
     const { boardID } = useParams();
 
+    // State for managing multiple labels with colors
     const [labels, setLabels] = useState<string[]>([]);
     const [labelColors, setLabelColors] = useState<string[]>([]);
 
@@ -65,12 +66,15 @@ const AddTask = () => {
         },
     })
 
+    // Add label to task and clear form fields
     const handleAddLabel = () => {
         setLabels([...labels, form.getValues('label') ?? '']);
         setLabelColors([...labelColors, form.getValues('labelColor') ?? '']);
         form.setValue('label', '');
         form.setValue('labelColor', '');
     }
+
+    // Create task with all labels and reset form
     function onSubmit(values: z.infer<typeof formSchema>) {
         console.log(values);
         const task = {

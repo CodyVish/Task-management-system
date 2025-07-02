@@ -16,6 +16,7 @@ const BoardPage = () => {
     const { openModal } = useModal();
     const { searchText } = useSearchText();
 
+    // Redirect to boards page if current board doesn't exist
     useEffect(() => {
         console.log(boards[boardID as string]);
         if (boardID === undefined || !boards[boardID]) navigate("/boards");
@@ -23,10 +24,12 @@ const BoardPage = () => {
 
     const [searchedTasks, setSearchedTasks] = useState<Task[]>([]);
 
+    // Get categories for current board
     const cats = useMemo(() => {
         return Object.values(categories).filter(cat => cat.board_id === boardID);
     }, [boardID, categories]);
 
+    // Get all tasks for current board
     const boardTasks = useMemo(() => {
         const tasksArray = Object.values(categories)
             .flatMap((category) => category?.tasks)
@@ -34,6 +37,7 @@ const BoardPage = () => {
         return tasksArray;
     }, [boardID, categories]);
 
+    // Filter tasks based on search text (title or labels)
     useEffect(() => {
         const filteredArr = boardTasks.filter((task) =>
             task.title.toLowerCase().includes(searchText.toLowerCase()) ||
@@ -42,24 +46,31 @@ const BoardPage = () => {
         setSearchedTasks(filteredArr);
     }, [searchText, boardTasks]);
 
+    // Handle drag and drop between categories
     const handleDragEnd = (result: DropResult) => {
         if (!result.destination) return;
 
         const { source, destination } = result;
+        // No change if dropped in same position
         if (source.droppableId === destination.droppableId && source.index === destination.index) return;
 
         const sourceCatID = source.droppableId;
         const destCatID = destination.droppableId;
 
+        // Update task category and move between lists
         const draggedTask = categories[sourceCatID].tasks[source.index];
         draggedTask.cat_id = destCatID;
 
+        // Remove from source category
         categories[sourceCatID].tasks.splice(source.index, 1);
         setTasks(categories[sourceCatID].tasks, sourceCatID);
 
+        // Add to destination category
         categories[destCatID].tasks.splice(destination.index, 0, draggedTask);
         setTasks(categories[destCatID].tasks, destCatID);
     }
+
+    // Conditional content based on task availability
     let content = null;
     if (boardTasks.length === 0) {
         content = <div className="text-center mt-7"><p className="font-semibold text-lg">No tasks found</p> <p>Create tasks by clicking on the plus button next to each category!</p> </div>
@@ -91,6 +102,7 @@ const BoardPage = () => {
                                 <Droppable key={cat.cat_id} droppableId={cat.cat_id}>
                                     {(provided: DroppableProvided) => <div {...provided.droppableProps}
                                         ref={provided.innerRef}>
+                                        {/* Category header with predefined colors and actions */}
                                         <div className="flex flex-wrap items-center gap-x-2 gap-y-1 rounded-2xl sm:rounded-3xl px-2 sm:px-3 py-1 sm:py-[2px] text-center w-fit shadow-md transition-colors"
                                             style={{
                                                 backgroundColor:
@@ -123,6 +135,7 @@ const BoardPage = () => {
                                               />
                                             </div>
                                         </div>
+                                        {/* Render filtered tasks for this category */}
                                         <div className="flex flex-col gap-y-2 sm:gap-y-3 mt-3 sm:mt-4">
                                             {
                                                 searchedTasks.filter((task) => task.cat_id === cat.cat_id).map((task, index) => (

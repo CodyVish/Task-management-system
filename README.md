@@ -8,6 +8,7 @@ Taskflow is a simple and modern Kanban board app for managing your tasks and pro
 2. Run `npm install` to install dependencies
 3. Start the development server with `npm run dev`
 4. Open [http://localhost:5173](http://localhost:5173) in your browser
+5. After, Just basic login page will appear, you can enter any random details.
 
 ## Features
 - Login and logout

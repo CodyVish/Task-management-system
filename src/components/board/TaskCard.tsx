@@ -9,7 +9,9 @@ interface TaskCardProps extends Task {
     id: number;
 }
 
+// Draggable task card with optimized re-renders using React.memo and callbacks
 const TaskCard = React.memo(({ title, desc, due_date, labels, task_id, cat_id, board_id, id }: TaskCardProps) => {
+    // Memoized task object to prevent unnecessary re-renders
     const task = useMemo(() => ({
         task_id,
         title,
@@ -25,6 +27,7 @@ const TaskCard = React.memo(({ title, desc, due_date, labels, task_id, cat_id, b
         deleteTask: state.deleteTask 
     }));
     
+    // Optimized callbacks to prevent re-renders of child components
     const handleDeleteTask = useCallback(() => {
         deleteTask(task_id, cat_id);
         toast({
@@ -48,6 +51,7 @@ const TaskCard = React.memo(({ title, desc, due_date, labels, task_id, cat_id, b
     }, [due_date]);
 
     return (
+        // Draggable wrapper for react-beautiful-dnd integration
         <Draggable draggableId={task_id} index={id}>
             {(provided) => <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps} className='bg-white dark:bg-[#232323] border-[#ddd] dark:border-[#333] border-2 shadow-sm rounded-lg p-3 sm:p-4 transition-all duration-200 hover:shadow-2xl hover:-translate-y-2 cursor-grab active:cursor-grabbing'>
                 <div className='flex items-start justify-between gap-2'>

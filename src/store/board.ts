@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
+// Core data types for the Kanban board
 export type Board = {
     board_id: string;
     email_id: string;
@@ -13,6 +14,7 @@ export type Label = {
     name: string;
     color: string;
 }
+
 export type Task = {
     task_id: string;
     cat_id: string;
@@ -22,6 +24,7 @@ export type Task = {
     due_date?: string;
     labels?: Label[];
 }
+
 export type Category = {
     cat_id: string;
     board_id: string;
@@ -30,6 +33,7 @@ export type Category = {
     tasks:Task[];
 }
 
+// Board management store with localStorage persistence
 interface BoardStore {
     boards: Record<string,Board>;
     setBoards: (boards: Record<string,Board>) => void;
@@ -54,6 +58,7 @@ export const useBoardStore = create<BoardStore>()(
     )
 )
 
+// Category and task management with drag-drop support
 interface CategoryStore {
     categories: Record<string, Category>;
     setCategories: (categories: Record<string, Category>) => void;
@@ -85,6 +90,7 @@ export const useCategoryStore = create<CategoryStore>()(
                 return { categories: newCategories };
             }),
 
+            // Task management within categories
             setTasks: (tasks, cat_id) => set((state) => {
                 const category = state.categories[cat_id];
                 if (!category) return state;
@@ -114,6 +120,7 @@ export const useCategoryStore = create<CategoryStore>()(
     )
 )
 
+// Global search functionality
 interface SearchStore {
     searchText: string;
     setSearchText: (searchText: string) => void;
@@ -123,6 +130,8 @@ export const useSearchText = create<SearchStore>((set) => ({
     setSearchText: (searchText: string) => set({ searchText }),
 }));
 
+// Migration function: Renames legacy "Not started" categories to "ToDo" 
+// Runs once on app load to maintain backward compatibility
 (function migrateNotStartedToToDo() {
   try {
     const raw = localStorage.getItem('category-storage');
@@ -141,6 +150,6 @@ export const useSearchText = create<SearchStore>((set) => ({
       localStorage.setItem('category-storage', JSON.stringify(data));
     }
   } catch (e) {
-    
+    // Silently handle parsing errors
   }
 })();
