@@ -1,3 +1,4 @@
+import React, { useCallback, useMemo } from 'react';
 import { Task, useCategoryStore } from '@/store/board';
 import { useModal } from '@/store/modal';
 import { Calendar, Pencil, Trash2 } from 'lucide-react';
@@ -7,8 +8,9 @@ import { toast } from "../ui/use-toast";
 interface TaskCardProps extends Task {
     id: number;
 }
-const TaskCard = ({ title, desc, due_date, labels, task_id, cat_id, board_id, id }: TaskCardProps) => {
-    const task = {
+
+const TaskCard = React.memo(({ title, desc, due_date, labels, task_id, cat_id, board_id, id }: TaskCardProps) => {
+    const task = useMemo(() => ({
         task_id,
         title,
         desc,
@@ -16,27 +18,34 @@ const TaskCard = ({ title, desc, due_date, labels, task_id, cat_id, board_id, id
         labels,
         cat_id,
         board_id
-    }
+    }), [task_id, title, desc, due_date, labels, cat_id, board_id]);
+
     const { openModal } = useModal();
-    const { deleteTask } = useCategoryStore();
+    const { deleteTask } = useCategoryStore((state) => ({ 
+        deleteTask: state.deleteTask 
+    }));
     
-    const handleDeleteTask = () => {
+    const handleDeleteTask = useCallback(() => {
         deleteTask(task_id, cat_id);
         toast({
             title: "Task deleted",
             variant: "destructive"
         })
-    }
+    }, [deleteTask, task_id, cat_id]);
 
-    const formatDate = (dateString: string) => {
-        if (!dateString) return null;
-        const date = new Date(dateString);
+    const handleEditTask = useCallback(() => {
+        openModal("edit-task", "", task);
+    }, [openModal, task]);
+
+    const formattedDate = useMemo(() => {
+        if (!due_date) return null;
+        const date = new Date(due_date);
         return date.toLocaleDateString('en-US', { 
             month: 'short', 
             day: 'numeric',
             year: 'numeric'
         });
-    }
+    }, [due_date]);
 
     return (
         <Draggable draggableId={task_id} index={id}>
@@ -49,7 +58,7 @@ const TaskCard = ({ title, desc, due_date, labels, task_id, cat_id, board_id, id
                     <div className='flex items-center gap-x-1 sm:gap-x-2 flex-shrink-0'>
                         <div 
                           className='p-1.5 sm:p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors cursor-pointer'
-                          onClick={() => openModal("edit-task", "", task)}
+                          onClick={handleEditTask}
                           title="Edit Task"
                         >
                           <Pencil className='w-3.5 h-3.5 sm:w-4 sm:h-4 text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400' />
@@ -68,7 +77,7 @@ const TaskCard = ({ title, desc, due_date, labels, task_id, cat_id, board_id, id
                         <div className='flex items-center gap-x-2'>
                             <Calendar size={12} className='text-[#5a5a65] dark:text-gray-400 flex-shrink-0' />
                             <p className='text-[#5a5a65] dark:text-gray-400 text-xs sm:text-sm font-medium'>
-                                Due: {formatDate(due_date)}
+                                Due: {formattedDate}
                             </p>
                         </div>
                     )}
@@ -85,6 +94,8 @@ const TaskCard = ({ title, desc, due_date, labels, task_id, cat_id, board_id, id
             </div>}
         </Draggable>
     )
-}
+});
+
+TaskCard.displayName = 'TaskCard';
 
 export default TaskCard;

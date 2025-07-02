@@ -31,7 +31,6 @@ import { optional, z } from "zod"
 
 import { useModal } from "@/store/modal";
 import { useCategoryStore } from "@/store/board";
-//utilities
 import { nanoid } from 'nanoid'
 import { labelColorsArr } from "@/constant";
 import { X } from "lucide-react";

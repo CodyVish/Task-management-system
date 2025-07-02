@@ -1,10 +1,8 @@
 import { useEffect } from "react"
 import { useNavigate } from "react-router-dom"
-//form utilities
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
-//components
 import { Button } from "@/components/ui/button"
 import {
       Form,

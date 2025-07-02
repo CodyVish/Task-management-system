@@ -1,13 +1,16 @@
-import React, { Suspense } from 'react'
+import React, { Suspense, lazy } from 'react'
 import ReactDOM from 'react-dom/client'
 import './index.css'
 import { createBrowserRouter, Navigate, RouterProvider } from 'react-router-dom'
-import DashboardLayout from './layout/dashboard-layout.tsx'
-import BoardLayout from './layout/board-layout.tsx'
-import { LoginPage, BoardPage, BoardsPage } from "@/pages/index"
 import { Toaster } from '@/components/ui/toaster'
 import Spinner from '@/components/ui/loader'
 import { ThemeProvider } from './store/theme-context'
+
+const DashboardLayout = lazy(() => import('./layout/dashboard-layout.tsx'))
+const BoardLayout = lazy(() => import('./layout/board-layout.tsx'))
+const LoginPage = lazy(() => import('@/pages/login/index.tsx'))
+const BoardPage = lazy(() => import('@/pages/board/index.tsx'))
+const BoardsPage = lazy(() => import('@/pages/boards/index.tsx'))
 
 const router = createBrowserRouter([
   { path: '/', element: <LoginPage /> },

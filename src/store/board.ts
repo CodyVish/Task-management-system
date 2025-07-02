@@ -123,7 +123,6 @@ export const useSearchText = create<SearchStore>((set) => ({
     setSearchText: (searchText: string) => set({ searchText }),
 }));
 
-// Migration: Rename 'Not started' to 'ToDo' in persisted categories
 (function migrateNotStartedToToDo() {
   try {
     const raw = localStorage.getItem('category-storage');
@@ -142,6 +141,6 @@ export const useSearchText = create<SearchStore>((set) => ({
       localStorage.setItem('category-storage', JSON.stringify(data));
     }
   } catch (e) {
-    // fail silently
+    
   }
 })();

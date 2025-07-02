@@ -16,7 +16,6 @@ const BoardPage = () => {
     const { openModal } = useModal();
     const { searchText } = useSearchText();
 
-    // check if the board exists
     useEffect(() => {
         console.log(boards[boardID as string]);
         if (boardID === undefined || !boards[boardID]) navigate("/boards");
@@ -24,12 +23,10 @@ const BoardPage = () => {
 
     const [searchedTasks, setSearchedTasks] = useState<Task[]>([]);
 
-    // get all the categories of the board
     const cats = useMemo(() => {
         return Object.values(categories).filter(cat => cat.board_id === boardID);
     }, [boardID, categories]);
 
-    // get all the tasks of the board
     const boardTasks = useMemo(() => {
         const tasksArray = Object.values(categories)
             .flatMap((category) => category?.tasks)
@@ -37,7 +34,6 @@ const BoardPage = () => {
         return tasksArray;
     }, [boardID, categories]);
 
-    //filter the tasks based on the search text
     useEffect(() => {
         const filteredArr = boardTasks.filter((task) =>
             task.title.toLowerCase().includes(searchText.toLowerCase()) ||
@@ -46,7 +42,6 @@ const BoardPage = () => {
         setSearchedTasks(filteredArr);
     }, [searchText, boardTasks]);
 
-    //function to handle drag and drop of tasks
     const handleDragEnd = (result: DropResult) => {
         if (!result.destination) return;
 
@@ -56,20 +51,15 @@ const BoardPage = () => {
         const sourceCatID = source.droppableId;
         const destCatID = destination.droppableId;
 
-        // get the task that is being dragged and update its cat_id with the destination category id
         const draggedTask = categories[sourceCatID].tasks[source.index];
         draggedTask.cat_id = destCatID;
 
-        // remove the task from source category
         categories[sourceCatID].tasks.splice(source.index, 1);
         setTasks(categories[sourceCatID].tasks, sourceCatID);
 
-        //add it to the destination category
         categories[destCatID].tasks.splice(destination.index, 0, draggedTask);
         setTasks(categories[destCatID].tasks, destCatID);
     }
-
-    // for displaying proper message if task is not found w.r.t searchText or no task is available
     let content = null;
     if (boardTasks.length === 0) {
         content = <div className="text-center mt-7"><p className="font-semibold text-lg">No tasks found</p> <p>Create tasks by clicking on the plus button next to each category!</p> </div>

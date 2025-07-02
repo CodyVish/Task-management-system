@@ -13,10 +13,8 @@ body {
   background: #e3f0ff;
   min-height: 100vh;
   font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  overflow-x: hidden; /* Prevent horizontal scrolling */
+  overflow-x: hidden;
 }
-
-/* Mobile-specific improvements */
 @media (max-width: 640px) {
   html {
     text-size-adjust: 100%;
@@ -29,7 +27,7 @@ body {
   }
 }
 
-/* Ensure proper line clamping */
+
 @layer utilities {
   .line-clamp-2 {
     overflow: hidden;
@@ -46,17 +44,17 @@ body {
   }
 }
 
-/* Ensure buttons and interactive elements have proper touch targets on mobile */
+
 @media (max-width: 640px) {
   button, 
   [role="button"],
   input[type="button"],
   input[type="submit"] {
-    min-height: 44px; /* Apple's recommended minimum touch target */
+    min-height: 44px;
     min-width: 44px;
   }
   
-  /* Ensure text doesn't get too small on mobile */
+  
   .text-xs {
     font-size: 0.75rem;
     line-height: 1rem;
